@@ -19,6 +19,7 @@ CREATE TABLE Accounts (
     AccountID INT,
     AccountType VARCHAR(20),
     Balance DECIMAL(10,2)
+    
 );
 
 desc accounts;
@@ -48,5 +49,63 @@ CREATE TABLE Loans (
     StartDate DATE,
     EndDate DATE
 );
+ desc loans;
+ 
+ALTER TABLE Customers 
+ADD DateOfBirth DATE;
+
+desc customers;
+ 
+ALTER TABLE Customers
+MODIFY Phone VARCHAR(20);
+
+ALTER TABLE Accounts
+ADD CONSTRAINT chk_MinBalance
+CHECK (Balance >= 1000);
+
+Drop table accountbranches;
+
+ALTER TABLE Accounts
+ADD CustomerID INT;
+
+ALTER TABLE Accounts
+ADD CONSTRAINT FK_Accounts_Customers
+FOREIGN KEY (CustomerID)
+REFERENCES Customers(CustomerID);
+
+ALTER table accounts
+add constraint 
+primary key(AccountID );
+
+desc accounts;
+
+ALTER TABLE Customers
+MODIFY FirstName VARCHAR(50) NOT NULL;
+
+desc customers;
+
+ALTER TABLE Customers
+ADD CONSTRAINT uq_Email UNIQUE (Email);
+
+ALTER table branches
+add constraint 
+primary key(BranchID);
+
+ALTER TABLE Accounts
+ADD BranchID INT;
+
+ALTER TABLE Accounts
+ADD CONSTRAINT FK_Branch_Customers
+FOREIGN KEY (BranchID)
+REFERENCES Branches(BranchID);
+
+
+
+desc accounts;
+
+
+
+
+
 
 
