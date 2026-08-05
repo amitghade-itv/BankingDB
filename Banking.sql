@@ -168,6 +168,116 @@ SET
 WHERE
     CustomerID = 101;	
 
+
+
+insert	into customers 
+values (105,'Karan','Mehta','karan@gmail.com','9876543214','2024-05-25','1996-12-30');
+
+INSERT INTO Branches
+VALUES
+(1,'Nagpur Branch','Sitabuldi, Nagpur','0712-123456'),
+(2,'Pune Branch','Shivaji Nagar, Pune','020-223344'),
+(3,'Mumbai Branch','Andheri, Mumbai','022-334455');
+
+INSERT INTO Accounts
+(AccountID,AccountType,Balance,CustomerID,BranchID)
+VALUES
+(1001,'Savings',25000,101,1),
+(1002,'Current',45000,102,2),
+(1003,'Savings',18000,103,1),
+(1004,'Current',72000,104,3),
+(1005,'Savings',15000,105,2);
+
+DELETE FROM Accounts
+WHERE accountid = 201;
+
+
+INSERT INTO Transactions
+VALUES
+(1,'2025-01-10',5000,'Deposit',1001),
+(2,'2025-01-12',2000,'Withdrawal',1001),
+(3,'2025-01-13',7000,'Deposit',1002),
+(4,'2025-01-15',3000,'Withdrawal',1003),
+(5,'2025-01-16',10000,'Deposit',1004);
+
+INSERT INTO Transactions
+VALUES
+(6,'2025-01-10',3000,'Deposit',1006);
+
+INSERT INTO Loans
+(LoanID,LoanAmount,InterestRate,StartDate,EndDate,CustomerID)
+VALUES
+(501,500000,8.5,'2024-01-01','2029-01-01',101),
+(502,250000,9.0,'2024-03-15','2028-03-15',103),
+(503,700000,7.8,'2024-06-20','2031-06-20',104);
+
+
+UPDATE accounts 
+SET 
+    balance = 30000
+WHERE
+    customerID = 101;
+    
+    
+UPDATE accounts 
+SET 
+    balance = balance + 2000
+WHERE
+    customerID = 102;
+
+UPDATE customers 
+SET 
+    email = 'rahulsharma@gmail.com',
+    phone = '7372748274'
+WHERE
+     customerid = 101;
+     
 select * from customers;
 select * from accounts;
+select * from branches;
+select * from loans;
+select * from transactions;
+SELECT 
+    customerid, firstname, lastname, phone
+FROM
+    customers;
+    
+SELECT 
+    *
+FROM
+    accounts
+WHERE
+    AccountType = 'Savings';
+
+SELECT 
+    *
+FROM
+    accounts
+WHERE
+    balance >= 30000;
+    
+    
+SELECT 
+    *
+FROM
+    accounts
+WHERE
+    AccountType <> 'Savings';
+    
+SELECT 
+    *
+FROM
+    accounts
+WHERE
+    balance >= 15000 && AccountType = 'Savings';    -- use AND or && in syntax
+    
+SELECT 
+    *
+FROM
+    accounts
+WHERE
+    balance >= 15000 OR AccountType = 'Savings'; -- use OR or || in syntax
+    
+select * from accounts where not accounttype ='Savings';
+
 
