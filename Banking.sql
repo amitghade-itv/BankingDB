@@ -280,4 +280,52 @@ WHERE
     
 select * from accounts where not accounttype ='Savings';
 
+-- Find all customers registered after 1July2026.
+select firstname,lastname,accountcreationdate
+from customers
+where AccountCreationDate > '2026-07-1';
+
+-- Query multiple customers using IN operator (Use phone number)
+select firstname,lastname,phone
+from customers
+where phone IN ('7372748274','9277476727','9876543214');
+
+select firstname,lastname,phone
+from customers
+where Phone='7372748274' OR Phone='9277476727' OR Phone='9876543214';
+
+-- BETWEEN operator
+-- Find customers having balance between 10000 to 30000
+SELECT customerid, accounttype,balance
+from accounts
+where balance between 10000 and 30000;
+-- the values specified in range are included in the results.  
+SELECT customerid, accounttype,balance
+from accounts
+where balance >= 10000 AND balance < 30000;
+
+-- LIKE operator
+-- Find all customers whose first name starts with letter "K" 
+-- % matches any number of characters, even zero characters
+select * from customers
+where FirstName LIKE 'K%';
+-- Find all customers whose last name ends with letter "a";
+select * from customers
+where LastName LIKE '%a';
+
+-- "_" matches exactly one character.
+-- Find all customers whose last name has exactly 3 characters;
+select * from customers
+where LastName LIKE '___';
+
+
+
+
+
+
+
+
+
+
+ 
 
