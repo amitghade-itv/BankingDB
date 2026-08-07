@@ -318,6 +318,106 @@ where LastName LIKE '%a';
 select * from customers
 where LastName LIKE '___';
 
+-- ORDER BY clause
+-- sort the accounts table according to customers balance.
+select customerid,balance
+from accounts
+order by balance;
+-- sort the branches table according to branchname.
+select branchid,branchname
+from branches
+order by branchname;
+-- sort the accounts table according to customers balance 
+-- from highest to lowest balance amount.
+select customerid,balance
+from accounts
+order by balance DESC;
+-- Sort according to multiple columns
+-- Sort accounts table according to the accounttype and balance
+select accountid,accounttype,balance,customerid
+from accounts
+order by AccountType DESC,Balance DESC;
+-- DISTINCT clause
+-- Find distinct(unique) account types from accounts table
+select distinct accounttype from accounts;
+-- Find distinct(unique) transaction types and accountID 
+-- from transactions table
+select * from transactions;
+select distinct transactiontype,accountid from transactions;
+select * from customers;
+
+select * from accounts;
+
+select * from accounts
+limit 2;
+
+select * from customers
+limit 3 offset 2;
+
+select * from accounts
+order by balance desc
+limit 2;
+
+select * from accounts
+order by balance desc
+limit 1 offset 2;
+
+select * from accounts
+order by balance desc
+limit 2,1;  -- Here 2 specifies the rows to skip and 1 specifies the number of rows to return
+
+
+INSERT INTO Customers
+(CustomerID, FirstName, LastName, Email, Phone, AccountCreationDate, DateOfBirth)
+VALUES
+(106,'Priya','Patil','priya@gmail.com',NULL,'2025-03-15','1999-04-18'),
+(107,'Amit','Verma','amit@gmail.com','9876500001','2025-07-10','1994-02-20'),
+(108,'Sneha','Kulkarni','sneha@gmail.com',NULL,'2026-01-12','2001-09-05'),
+(109,'Rohan','Deshmukh','rohan@gmail.com','9876500002','2024-09-08','1997-01-10'),
+(110,'Pooja','Shah','pooja@gmail.com','9876500003','2025-12-01','1998-12-15');
+
+select * from customers
+where phone IS NULL;
+
+select * from customers
+where phone IS NOT NULL;
+
+INSERT INTO Accounts
+(AccountID,AccountType,Balance,CustomerID,BranchID)
+VALUES
+(1006,'Savings',12000,106,1),
+(1007,'Current',85000,107,2),
+(1008,'Savings',50000,108,3),
+(1009,'Salary',27000,109,2),
+(1010,'Savings',9500,110,1);
+
+select * from accounts;
+
+INSERT INTO Transactions
+VALUES
+(7,'2025-02-10',2500,'Deposit',1006),
+(8,'2025-02-12',500,'Withdrawal',1006),
+(9,'2025-02-15',15000,'Deposit',1007),
+(10,'2025-02-20',3500,'Withdrawal',1008),
+(11,'2025-03-01',5000,'Deposit',1009),
+(12,'2025-03-05',4500,'Withdrawal',1010);
+
+select * from transactions;
+
+INSERT INTO Loans
+VALUES
+(504,300000,8.9,'2025-01-01','2030-01-01',106),
+(505,900000,7.2,'2024-09-01','2034-09-01',108);
+
+select * from loans;
+
+select accountid,accounttype,balance,
+case
+when balance >= 50000 then "High Value Customer"
+else "Low Value Customer"
+END AS 'CustomerCategory'
+from accounts;
+
 
 
 
