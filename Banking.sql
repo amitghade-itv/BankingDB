@@ -411,18 +411,55 @@ VALUES
 
 select * from loans;
 
-select accountid,accounttype,balance,
+SELECT 
+    accountid,
+    accounttype,
+    balance,
+    CASE
+        WHEN balance >= 50000 THEN 'High Value Customer'
+        ELSE 'Low Value Customer'
+    END AS 'CustomerCategory'
+FROM
+    accounts;
+
+-- Categorize the deposits in the transactions table as per conditions given
+-- if above 10000(included) High amount
+-- if 5000(included) to 10000 Medium amount
+-- if upto 5000 Low Amount
+-- For Transaction type Withdrawal "Not Applicable"
+
+select * ,
 case
-when balance >= 50000 then "High Value Customer"
-else "Low Value Customer"
-END AS 'CustomerCategory'
-from accounts;
+    when TransactionType = "Deposit" AND amount >= 10000 then "High Amount"
+    when TransactionType = "Deposit" AND amount >= 5000 then "Medium Amount"
+    when TransactionType = "Deposit" AND amount < 5000 then "Low Amount"
+    ELSE "Not Applicable"
+    END AS "TransactionCategory"
+    from transactions
+    where TransactionDate > "2025-02-01";
 
+select * from transactions;
+select * from customers;
 
+select customerid,upper(firstname),upper(lastname) from customers;
+select customerid,lower(firstname),lower(lastname) from customers;
 
+-- Select upper("india")
+select * from branches;
 
+select lastname , length(lastname) from customers;
 
+select length("NAGPUR") AS "NoOfCharacters"; -- gives o/p in number of bytes
+select length("नागपूर");-- gives o/p in number of bytes
+select char_length("NAGPUR");-- gives o/p in number of characters
+select char_length("नागपूर");-- gives o/p in number of characters
 
+select concat("Hero"," ","Honda") as vehiclename;
+
+select customerid,concat(firstname," ",lastname) as Fullname ,phone
+from customers;
+
+select substring("Hello World",1,4);
 
 
 
