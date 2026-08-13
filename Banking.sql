@@ -461,8 +461,81 @@ from customers;
 
 select substring("Hello World",1,4);
 
+select 
+customerid, 
+concat(substring(firstname,1,1),".",lastname) as FullName,
+phone
+from customers;
 
+-- Trim() function
+select  length("  Hello World  ");
+select  length(trim("  Hello World  "));
+select length(trim(substring("Hello World",6)));
+
+-- replace function
+select replace("Mat mat Mat","M","C");
+
+
+ select * from accounts;
+ 
+-- Avg() function
+select avg(Balance) from accounts
+where accounttype = "Savings";
+
+--  round() function
+select round(avg(Balance),2) from accounts
+where accounttype = "Savings";
+-- Ceil() or Ceiling() function
+select ceiling(avg(Balance)) from accounts
+where accounttype = "Savings";
+
+-- floor() function
+select floor(avg(Balance)) from accounts
+where accounttype = "Savings";
+
+select * from transactions;
+
+select avg(amount) as AverageDeposit from transactions where
+transactiontype = "Deposit";
+
+-- Absolute() function......It removes the sign
+select abs(-3656);
+select abs(-1.34);
+select abs(6.464);
+
+-- MOD value 
+select  (7/3);
+select mod(7,3); 
+
+-- Power()
+select power(2,3);
+select power(1.5,3);
+
+-- SQRT()
+select sqrt(123);
+select sqrt(144);
+
+select * from customers;
+
+-- Date functions
+-- NOW() function
+select NOW();
+-- curdate() function 
+ select curdate();
+ -- curtime() function 
+ select curtime();
+ 
+ -- YEAR() MONTH() DAY()
+select DateOfBirth,year(Dateofbirth) as Year,
+month(Dateofbirth) as Month,
+day(Dateofbirth) as Date
+from customers;
+
+-- Datediff () function...Returns number of days between two dates.
+select concat(firstname," ",lastname) as fullname,dateofbirth,
+floor(datediff(curdate(),dateofbirth)/365) as age from customers;
 
 
  
-
+ 
+ 
