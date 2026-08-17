@@ -535,6 +535,118 @@ from customers;
 select concat(firstname," ",lastname) as fullname,dateofbirth,
 floor(datediff(curdate(),dateofbirth)/365) as age from customers;
 
+-- Date_add function
+ select concat(firstname," ",lastname) as fullname,
+ accountcreationdate,
+ date_add(accountcreationdate, interval 1 year) as KYCRenewal
+ from customers;
+ -- date_sub function  
+SELECT 
+DATE_SUB(CURDATE(), INTERVAL 7 DAY);
+
+-- count() function
+select * from customers;
+select count(*) as TotalCustomers from customers;
+select count(phone) as TotalCustomers from customers;
+
+-- sum() function
+select * from accounts;
+select sum(balance) as totalBalance from accounts;
+select sum(balance) as SavingsBalance from accounts
+where accounttype = "savings";
+select sum(balance) as CurrentBalance from accounts
+where accounttype = "current";
+
+-- avg() function
+select * from transactions;
+select avg(amount) as totalAmountTransacted from transactions;
+select avg(amount) as AvgAmountDeposited  from transactions
+where transactiontype = "Deposit";
+select avg(amount) as AvgAmountWithdrawn from transactions
+where transactiontype = "Withdrawal";
+
+-- max() and min() function
+-- find maximum balance available in savings account
+select max(balance) from accounts
+where AccountType = "savings"; 
+-- find minimum balance available in savings account
+select min(balance) from accounts
+where AccountType = "savings"; 
+
+EXPLAIN SELECT COUNT(*) FROM customers;
+
+-- GROUP BY 
+select * from transactions;
+select transactiontype, sum(amount) from transactions
+group by (transactiontype);
+
+select * from accounts;
+select accounttype,
+       count(*) as TotalAccounts,
+       sum(balance) as totalBalance,
+       avg(balance) as avgBalance
+from accounts
+group by accounttype;
+
+-- Find total accounts for branch and accounttype;
+select * from accounts;
+
+select branchid,accounttype, count(*) as NoOfAccounts
+from accounts
+group by branchid,accounttype
+order by branchid;
+
+-- Having 
+select branchid,accounttype, count(*) as NoOfAccounts
+from accounts
+group by branchid,accounttype
+having noofaccounts >= 2 and AccountType = "savings";
+
+select * from customers;
+-- Find number of customers for according to year from customers table
+SELECT 
+    YEAR(accountcreationdate) AS years, COUNT(*) AS noOfAccounts
+FROM
+    customers
+GROUP BY years
+order by years desc;
+
+select * from customers;
+select * from accounts;
+select * from loans;
+select * from branches;
+
+-- Joins
+-- INNER JOIN
+ -- Find all customers having loans with their names, 
+ -- interest rate and loan amount.
+ select c.customerid,c.firstname,c.lastname,l.loanamount,l.interestrate
+ from customers c
+ inner join loans l
+ on c.CustomerID = l.CustomerID;
+ 
+-- Find the branch names for all the accountid's
+-- Include account id, accounttype and branchname,branchaddress.
+select a.accountid,a.accounttype,b.branchname,b.branchaddress
+from accounts a
+join branches b
+on a.BranchID = b.BranchID
+where accounttype = "Savings";
+
+select * from transactions;
+
+-- Find all the customers(name, phone, accounttype,balance) 
+-- where account type is savings
+ 
+
+
+ 
+ 
+
+
+
+
+
 
  
  
