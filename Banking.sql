@@ -829,11 +829,219 @@ join employees m
 on e.ManagerID = m.EmployeeID
 where m.employeename = "Sneha Verma";
 
+-- SUBQUERIES
+-- Find all customers having balance more than the average balance
+-- in the savings account.
+
+select * from accounts;
+select avg(balance) from accounts
+where accounttype="savings";
+
+select c.firstname,a.balance from customers c
+join accounts a
+on c.CustomerID = a.CustomerID
+where a.accounttype = "Savings";
+
+select c.CustomerID,c.firstname,avg(a.balance) as avgBalance from customers c
+join accounts a
+on c.CustomerID = a.CustomerID
+where a.accounttype = "Savings"
+group by c.FirstName,c.customerid
+having avgBalance > 22357;
+
+-- SCALAR subquery
+select accountid,customerid
+from accounts
+where balance > (
+     select avg(balance) from accounts
+     where accounttype = "Savings"
+)   && accounttype = "Savings";
+
+select accountid,customerid
+from accounts
+where balance > (
+     select avg(balance) from accounts
+);
+select a.accountid,c.customerid, c.firstname
+from accounts a
+join customers c
+on a.CustomerID = c.CustomerID
+where a.balance > (
+     select avg(balance) from accounts
+     where accounttype = "Savings"
+)   && accounttype = "Savings";
+
+-- Find the account(s) having the highest balance. 
+
+select accountid,customerid,balance
+from accounts
+where balance = (
+select max(balance) from accounts
+);
+-- Find customers whose year of birth is earlier than the average year of birth 
+-- of all customers.
+select * from customers; 
+select floor(avg(year(dateofbirth))) from customers;
+
+select firstname,lastname,dateofbirth, year(DateOfBirth) as yearofBirth
+from customers
+where year(DateOfBirth) < (
+		select floor(avg(year(dateofbirth))) from customers
+);
+
+SELECT branchid, AVG(balance) AS avgBalance
+FROM accounts
+GROUP BY branchid
+HAVING AVG(balance) = (
+    SELECT MAX(avgBalance)
+    FROM (
+        SELECT AVG(balance) AS avgBalance
+        FROM accounts
+        GROUP BY branchid
+    ) AS t
+);
+
+-- Multi row subquery
+-- Find all customers who have taken at least one loan
+select * from customers;
+select * from loans;
+select customerID, firstname, phone
+from customers where
+customerID in (select customerID from loans);
+
+-- select customerID from loans;
+
+-- Find all customers who have at least one Savings account
+select * from accounts;
+
+select customerId,firstname,phone
+from customers
+where customerid in (
+      select customerID from accounts where
+      accounttype = "Savings"
+);
+
+-- Find all customers who have an account in BranchID = 1. 
+select * from customers;
+select * from accounts;
+
+select customerid,firstname from
+customers where customerid in(
+select customerid from accounts where
+BranchID = 1
+);
+select customerid from accounts where
+BranchID = 1;
+
+-- Find all accounts whose balance is greater than 
+-- any account in BranchID = 1
+
+select accountid, balance from accounts
+where balance > ANY (
+		select balance from accounts
+        where BranchID = 1);
+        
+ -- Find all accounts whose balance is greater than 
+-- all accounts in BranchID = 1       
+select accountid, balance from accounts
+where balance > ALL (
+		select balance from accounts
+        where BranchID = 1);
+
+-- Find the branch with the highest average account balance
+select branchid, avg(balance) as avgBalance from
+accounts group by branchid
+order by avgBalance DESC
+limit 1;
+
+-- Find accounts whose balance is greater than 
+-- the average balance of their respective branch
+select * from accounts;
+
+select avg(balance) from accounts
+where accounttype = "Savings";
+
+select a.accountid,a.balance,a.BranchID 
+from accounts a
+where a.balance > (
+     select avg(a1.balance) from accounts a1 
+     where a1.BranchID = a.BranchID
+);
+
+-- Find employees whose salary is greater than
+-- the average salary of their respective department. 
+select * from employees;
+
+select e.employeename,e.department,e.salary from employees e
+where e.salary > (
+select avg(e1.salary) from employees e1
+where e1.Department = e.Department
+);
+-- Find customers who have more than one account
+select * from customers;
+select * from accounts;
+
+select c.firstname,c.lastname
+from customers c where (
+select count(*) from accounts a
+where c.CustomerID = a.CustomerID
+) > 1;
+
+-- Find the average account balance for each account type 
+-- using a derived table. 
+SELECT * FROM accounts;
+
+SELECT AccountBalance.accounttype, AccountBalance.avgBalance
+FROM (
+  select accounttype,avg(balance) as avgBalance from accounts
+  group by AccountType ) AccountBalance;
 
 
+-- Display only those account types whose average balance is 
+-- greater than ₹30,000
+SELECT AccountBalance.accounttype, AccountBalance.avgBalance
+FROM (
+  select accounttype,avg(balance) as avgBalance from accounts
+  group by AccountType ) AccountBalance
+  where AccountBalance.avgBalance > 30000;
+-- Find the top 3 customers based on their total account balance
 
+select CustomerBalance.firstname,CustomerBalance.customerid,CustomerBalance.TotalBalance
+FROM  (select c.FirstName,c.customerid,sum(a.balance) as TotalBalance
+       from accounts a
+       join customers c
+       on a.CustomerID = c.CustomerID
+        group by customerid) AS CustomerBalance
+order by CustomerBalance.TotalBalance DESC
+LIMIT 3;
 
-
+-- Subquery inside select clause
  
- 
- 
+-- Display each customer along with the number of accounts they have
+select c.customerid,
+     (
+     select count(*) from accounts a
+     where c.CustomerID = a.CustomerID
+     ) as totalAccounts from customers c
+     order by totalAccounts desc;
+
+
+-- Subqueries inside UPDATE clause
+
+-- Increase the balance of accounts belonging to customers 
+-- who have taken a loan by 5% 
+select * from accounts;
+select * from loans;
+
+UPDATE accounts SET balance = balance + balance*0.05
+WHERE customerid IN (
+   select customerid from loans
+    );
+
+
+
+
+
+
+
+
