@@ -1037,11 +1037,108 @@ UPDATE accounts SET balance = balance + balance*0.05
 WHERE customerid IN (
    select customerid from loans
     );
+    
+select * from transactions;
+
+-- subquery inside DELETE clause
+
+-- Delete all transactions below amount of 1000 where transaction type is withdrawal.
+delete from transactions
+where accountid in (
+select AccountID from (select accountid from transactions
+where amount < 2500 and TransactionType = "Withdrawal") as temp
+) and TransactionType = "Withdrawal";
 
 
+select * from accounts;
 
 
+-- subqueries in INSERT clause
 
+-- Create a HighValueAccounts table and insert all accounts whose 
+-- balance is greater than the average account balance. 
+CREATE TABLE HighValueAccounts (
+    AccountID INT,
+    CustomerID INT,
+    BranchID INT,
+    AccountType VARCHAR(20),
+    Balance DECIMAL(10,2),
+    FOREIGN KEY (CustomerID) REFERENCES customers(CustomerID),
+    FOREIGN KEY (BranchID) REFERENCES branches(BranchID)
+);
+
+desc highvalueaccounts;
+
+select * from highvalueaccounts;
+
+insert into highvalueaccounts (accountid,customerid,branchid
+,accounttype,balance) 
+select accountid,customerid,branchid
+,accounttype,balance from accounts
+where balance > (
+select avg(balance) from accounts
+);
+
+-- Create a HighBalanceCustomers table and insert customers whose total account
+-- balance is greater than ₹50,000. 
+
+create table HighBalanceCustomers(
+customerID INT ,
+TotalBalance DECIMAL(10,2)
+);
+
+select * from highbalancecustomers;
+
+insert into highbalancecustomers (customerid,totalbalance)
+select customerid, totalbalance from
+	(select customerid, sum(balance) as totalBalance
+	from accounts
+	group by customerid) as custBalance
+where totalbalance > 50000;
+
+-- SQL VIEWS
+create or replace view PremiumAccounts AS
+select a.accountid,a.accounttype,a.balance,a.customerid,t.transactiondate,
+t.amount,t.transactiontype
+from accounts a
+join transactions t
+on a.AccountID = t.AccountID
+where balance > 50000;
+
+select * from premiumaccounts
+where accounttype = "Savings";
+
+select * from premiumaccounts;
+select * from transactions;
+
+select distinct(customerid), accountid,balance
+from premiumaccounts
+order by balance DESC
+limit 2;
+
+-- WINDOWS FUNCITONS
+select * from accounts;
+
+select avg(balance) from accounts; 
+
+select accountid,accounttype,balance,
+avg(balance) over() as TotalAvgBalance from accounts; 
+
+select accountid,accounttype,balance,
+avg(balance) over(partition by accounttype ) as TotalAvgBalance from accounts; 
+
+select accountid,accounttype,balance,
+avg(balance) over(partition by accounttype order by balance DESC) as TotalAvgBalance from accounts; 
+
+select accountid,accounttype,balance,
+ROW_NUMBER() over() as RowNo,
+avg(balance) over() as TotalAvgBalanace
+from accounts; 
+
+select accountid,accounttype,balance,
+RANK() over(order by balance DESC) as Ranks,
+dense_rank() over(order by balance DESC) as DenseRank
+from accounts; 
 
 
 
